@@ -22,6 +22,7 @@
                     <table class="table table-dark table-hover align-middle">
                         <thead>
                             <tr>
+                                <th>Photo</th>
                                 <th>ID</th>
                                 <th>Email</th>
                                 <th>Nom</th>
@@ -34,6 +35,13 @@
                         <tbody>
                             {% for user in users %}
                                 <tr>
+                                    <td>
+                                        {% if user.profilePicture %}
+                                            <img src="{{ user.profilePicture }}" alt="Photo de profil" class="user-avatar">
+                                        {% else %}
+                                            <img src="https://via.placeholder.com/80x80?text=User" alt="Photo de profil" class="user-avatar">
+                                        {% endif %}
+                                    </td>
                                     <td>{{ user.id }}</td>
                                     <td>{{ user.email }}</td>
                                     <td>{{ user.firstName }} {{ user.lastName }}</td>

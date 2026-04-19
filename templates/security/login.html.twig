@@ -62,4 +62,9 @@
             </form>
         </div>
     </div>
+    {% if error %}
+    <div class="alert alert-warning">
+        {{ error.messageKey|trans(error.messageData, 'security') }}
+    </div>
+{% endif %}
 {% endblock %}

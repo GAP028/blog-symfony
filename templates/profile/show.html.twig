@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profil{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="gothic-card p-4 p-md-5 form-card text-center">
+            <div class="brand-mark">Profil</div>
+            <h1 class="section-title mb-4">Mon profil</h1>
+
+            {% if app.user.profilePicture %}
+                <img src="{{ app.user.profilePicture }}" alt="Photo de profil" class="profile-avatar-large mb-4">
+            {% else %}
+                <img src="https://via.placeholder.com/160x160?text=User" alt="Photo de profil" class="profile-avatar-large mb-4">
+            {% endif %}
+
+            <p class="mb-2"><strong>Nom :</strong> {{ app.user.firstName }} {{ app.user.lastName }}</p>
+            <p class="mb-2"><strong>Email :</strong> {{ app.user.email }}</p>
+            <p class="mb-2"><strong>Rôles :</strong> {{ app.user.roles|join(', ') }}</p>
+            <p class="mb-4"><strong>Compte actif :</strong> {{ app.user.isActive ? 'Oui' : 'Non' }}</p>
+
+            <a href="{{ path('app_home') }}" class="btn btn-outline-gold">Retour à l’accueil</a>
+        </div>
+    </div>
+{% endblock %}
