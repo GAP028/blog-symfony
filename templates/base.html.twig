@@ -272,6 +272,41 @@
                     object-fit: cover;
                     border: 3px solid rgba(201, 163, 95, 0.55);
                 }
+                .form-card .form-label {
+                    display: block;
+                    margin-bottom: 0.6rem;
+                    font-size: 1.05rem;
+                }
+
+                .form-card .form-control,
+                .form-card .form-select {
+                    width: 100%;
+                    padding: 0.85rem 1rem;
+                }
+
+                .form-card input[type="file"] {
+                    width: 100%;
+                    padding: 0.7rem 0.9rem;
+                    background: rgba(255,255,255,0.05);
+                    color: var(--text-main);
+                    border: 1px solid rgba(201,163,95,0.24);
+                    border-radius: 14px;
+                }
+
+                .form-card .form-check-input {
+                    margin-top: 0.3rem;
+                }
+
+                .form-card .form-check-label {
+                    color: var(--gold-light);
+                }
+
+                .form-card .invalid-feedback,
+                .form-card .form-error-message,
+                .form-card ul {
+                    color: #ffb3b3;
+                    margin-top: 0.5rem;
+                }
             </style>
         {% endblock %}
     </head>
