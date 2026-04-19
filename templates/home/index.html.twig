@@ -1,2 +1,55 @@
-<h1>Bienvenue sur mon projet Symfony</h1>
-<p>Mon projet fonctionne enfin.</p>
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="hero">
+            <h1 class="display-5 fw-bold">Bienvenue sur mon Blog Symfony</h1>
+            <p class="lead mt-3">
+                Projet Symfony avec authentification, rôles, articles, catégories et commentaires.
+            </p>
+
+            {% if app.user %}
+                <p class="mt-3 mb-4">
+                    Connecté en tant que <strong>{{ app.user.email }}</strong>
+                </p>
+                <a href="{{ path('post_list') }}" class="btn btn-light btn-lg me-2">Voir les articles</a>
+                <a href="{{ path('app_logout') }}" class="btn btn-outline-light btn-lg">Déconnexion</a>
+            {% else %}
+                <p class="mt-3 mb-4">
+                    Connectez-vous ou créez un compte pour interagir avec le blog.
+                </p>
+                <a href="{{ path('app_login') }}" class="btn btn-light btn-lg me-2">Connexion</a>
+                <a href="{{ path('app_register') }}" class="btn btn-outline-light btn-lg">Inscription</a>
+            {% endif %}
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card p-4 h-100">
+                    <h3 class="section-title">Articles</h3>
+                    <p>Consultez la liste des articles publiés sur le blog.</p>
+                    <a href="{{ path('post_list') }}" class="btn btn-primary">Voir les articles</a>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card p-4 h-100">
+                    <h3 class="section-title">Catégories</h3>
+                    <p>Explorez les catégories disponibles pour naviguer plus facilement.</p>
+                    <a href="{{ path('category_list') }}" class="btn btn-secondary">Voir les catégories</a>
+                </div>
+            </div>
+        </div>
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="card p-4 mt-4">
+                <h3 class="section-title">Espace administrateur</h3>
+                <p>Vous avez accès à la gestion des articles et des catégories.</p>
+                <a href="{{ path('post_new') }}" class="btn btn-success me-2">Nouvel article</a>
+                <a href="{{ path('category_new') }}" class="btn btn-warning">Nouvelle catégorie</a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

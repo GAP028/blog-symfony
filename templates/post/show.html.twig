@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détail de l'article{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="card p-4 mb-4">
+            <h1 class="mb-3">{{ post.title }}</h1>
+
+            <p class="text-muted">
+                Publié le {{ post.publishedAt ? post.publishedAt|date('d/m/Y H:i') : 'non défini' }}
+            </p>
+
+            <p><strong>Auteur :</strong> {{ post.author ? post.author.email : 'aucun' }}</p>
+            <p><strong>Catégorie :</strong> {{ post.category ? post.category.name : 'aucune' }}</p>
+
+            {% if post.picture %}
+                <div class="mb-4">
+                    <img
+                        src="{{ post.picture }}"
+                        alt="{{ post.title }}"
+                        class="img-fluid rounded shadow-sm"
+                        style="max-height: 450px; width: 100%; object-fit: cover;"
+                    >
+                </div>
+            {% endif %}
+
+            <hr>
+
+            <div>
+                {{ post.content }}
+            </div>
+
+            {% if is_granted('ROLE_ADMIN') %}
+                <div class="mt-4">
+                    <a href="{{ path('post_edit', {'id': post.id}) }}" class="btn btn-warning">Modifier</a>
+
+                    <form method="post" action="{{ path('post_delete', {'id': post.id}) }}" class="d-inline-block" onsubmit="return confirm('Voulez-vous vraiment supprimer cet article ?');">
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="card p-4 mb-4">
+            <h2 class="section-title">Commentaires</h2>
+
+            {% if post.comments is empty %}
+                <div class="alert alert-info">Aucun commentaire pour le moment.</div>
+            {% else %}
+                {% for comment in post.comments %}
+                    <div class="border rounded p-3 mb-3 bg-light">
+                        <p class="mb-2">{{ comment.content }}</p>
+                        <small class="text-muted">
+                            Par {{ comment.author ? comment.author.email : 'utilisateur inconnu' }}
+                            le {{ comment.createdAt ? comment.createdAt|date('d/m/Y H:i') : '' }}
+                        </small>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="card p-4">
+            {% if app.user %}
+                <h3 class="section-title">Ajouter un commentaire</h3>
+
+                {{ form_start(commentForm, {
+                    'action': path('comment_new', {'id': post.id})
+                }) }}
+                    {{ form_widget(commentForm) }}
+                    <button type="submit" class="btn btn-primary mt-3">Commenter</button>
+                {{ form_end(commentForm) }}
+            {% else %}
+                <div class="alert alert-info">
+                    Vous devez être connecté pour ajouter un commentaire.
+                </div>
+            {% endif %}
+        </div>
+
+        <a href="{{ path('post_list') }}" class="btn btn-secondary mt-4">Retour à la liste</a>
+    </div>
+{% endblock %}

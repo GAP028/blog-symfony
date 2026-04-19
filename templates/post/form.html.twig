@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formulaire article{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="card p-4 form-card">
+            <h1 class="section-title">Formulaire article</h1>
+
+            {{ form_start(form) }}
+                {{ form_row(form.title) }}
+                {{ form_row(form.content) }}
+                {{ form_row(form.publishedAt) }}
+                {{ form_row(form.picture) }}
+                {{ form_row(form.category) }}
+
+                <button type="submit" class="btn btn-success mt-3">Enregistrer</button>
+                <a href="{{ path('post_list') }}" class="btn btn-secondary mt-3">Annuler</a>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des catégories{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="section-title mb-0">Liste des catégories</h1>
+
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('category_new') }}" class="btn btn-warning">Nouvelle catégorie</a>
+            {% endif %}
+        </div>
+
+        {% if categories is empty %}
+            <div class="alert alert-info">Aucune catégorie enregistrée.</div>
+        {% else %}
+            <div class="row g-4">
+                {% for category in categories %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card p-3 h-100">
+                            <div class="card-body">
+                                <h4 class="card-title">{{ category.name }}</h4>
+                                <p class="card-text">
+                                    {{ category.description ?: 'Aucune description disponible.' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
