@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\AdminActionLog;
 use App\Entity\User;
 use App\Form\AdminUserType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -111,10 +112,36 @@ final class AdminUserController extends AbstractController
     #[Route('/{id}/toggle', name: 'toggle')]
     public function toggleUser(User $user, EntityManagerInterface $entityManager): Response
     {
-        $user->setIsActive(!$user->isActive());
+        /** @var User $admin */
+        $admin = $this->getUser();
+
+        $newState = !$user->isActive();
+        $user->setIsActive($newState);
+
+        $log = new AdminActionLog();
+        $log->setTargetEmail($user->getEmail());
+        $log->setPerformedByEmail($admin->getEmail());
+        $log->setAction($newState ? 'activation_compte' : 'desactivation_compte');
+        $log->setCreatedAt(new \DateTimeImmutable());
+        $log->setDetails(sprintf(
+            "Le compte %s a été %s par l'administrateur %s.",
+            $user->getEmail(),
+            $newState ? 'activé' : 'désactivé',
+            $admin->getEmail()
+        ));
+
+        $entityManager->persist($log);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Le statut du compte a bien été mis à jour.');
+        $this->addFlash(
+            'success',
+            sprintf(
+                "Le compte %s a bien été %s par %s.",
+                $user->getEmail(),
+                $newState ? 'activé' : 'désactivé',
+                $admin->getEmail()
+            )
+        );
 
         return $this->redirectToRoute('admin_user_list');
     }
@@ -122,10 +149,34 @@ final class AdminUserController extends AbstractController
     #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
     public function deleteUser(User $user, EntityManagerInterface $entityManager): Response
     {
+        /** @var User $admin */
+        $admin = $this->getUser();
+
+        $targetEmail = $user->getEmail();
+
+        $log = new AdminActionLog();
+        $log->setTargetEmail($targetEmail);
+        $log->setPerformedByEmail($admin->getEmail());
+        $log->setAction('suppression_compte');
+        $log->setCreatedAt(new \DateTimeImmutable());
+        $log->setDetails(sprintf(
+            "Le compte %s a été supprimé par l'administrateur %s.",
+            $targetEmail,
+            $admin->getEmail()
+        ));
+
+        $entityManager->persist($log);
         $entityManager->remove($user);
         $entityManager->flush();
 
-        $this->addFlash('success', 'L’utilisateur a bien été supprimé.');
+        $this->addFlash(
+            'warning',
+            sprintf(
+                "Le compte %s a été supprimé par %s.",
+                $targetEmail,
+                $admin->getEmail()
+            )
+        );
 
         return $this->redirectToRoute('admin_user_list');
     }

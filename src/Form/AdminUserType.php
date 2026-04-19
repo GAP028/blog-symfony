@@ -44,11 +44,22 @@ class AdminUserType extends AbstractType
             ->add('isActive', null, [
                 'label' => 'Compte actif',
                 'required' => false,
-            ])
-            ->add('plainPassword', RepeatedType::class, [
+            ]);
+
+        if ($isEdit) {
+            $builder->add('plainPassword', PasswordType::class, [
+                'label' => 'Nouveau mot de passe (laisser vide pour ne pas changer)',
+                'mapped' => false,
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Laisser vide pour conserver le mot de passe actuel',
+                ],
+            ]);
+        } else {
+            $builder->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'mapped' => false,
-                'required' => !$isEdit,
+                'required' => true,
                 'first_options' => [
                     'label' => 'Mot de passe',
                 ],
@@ -56,8 +67,8 @@ class AdminUserType extends AbstractType
                     'label' => 'Confirmation du mot de passe',
                 ],
                 'invalid_message' => 'Les mots de passe doivent être identiques.',
-            ])
-        ;
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
