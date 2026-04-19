@@ -6,6 +6,7 @@ use App\Entity\Post;
 use App\Entity\Comment;
 use App\Form\PostType;
 use App\Form\CommentType;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Attribute\IsGranted;
@@ -20,7 +21,8 @@ final class PostController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function newPost(
         Request $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        FileUploader $fileUploader
     ): Response {
         $post = new Post();
         $form = $this->createForm(PostType::class, $post);
@@ -28,10 +30,19 @@ final class PostController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $pictureFile = $form->get('pictureFile')->getData();
+
+            if ($pictureFile) {
+                $filename = $fileUploader->upload($pictureFile, 'posts');
+                $post->setPicture($filename);
+            }
+
             $post->setAuthor($this->getUser());
 
             $entityManager->persist($post);
             $entityManager->flush();
+
+            $this->addFlash('success', 'La chronique a bien été créée.');
 
             return $this->redirectToRoute('post_list');
         }
@@ -68,14 +79,24 @@ final class PostController extends AbstractController
     public function editPost(
         Post $post,
         Request $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        FileUploader $fileUploader
     ): Response {
         $form = $this->createForm(PostType::class, $post);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $pictureFile = $form->get('pictureFile')->getData();
+
+            if ($pictureFile) {
+                $filename = $fileUploader->upload($pictureFile, 'posts');
+                $post->setPicture($filename);
+            }
+
             $entityManager->flush();
+
+            $this->addFlash('success', 'La chronique a bien été modifiée.');
 
             return $this->redirectToRoute('post_list');
         }
@@ -93,6 +114,8 @@ final class PostController extends AbstractController
     ): Response {
         $entityManager->remove($post);
         $entityManager->flush();
+
+        $this->addFlash('warning', 'La chronique a bien été supprimée.');
 
         return $this->redirectToRoute('post_list');
     }

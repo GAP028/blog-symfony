@@ -5,11 +5,12 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -37,11 +38,16 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'exemple@mail.com',
                 ],
             ])
-            ->add('profilePicture', UrlType::class, [
-                'label' => 'Photo de profil (URL)',
+            ->add('profilePictureFile', FileType::class, [
+                'label' => 'Photo de profil',
+                'mapped' => false,
                 'required' => false,
-                'attr' => [
-                    'placeholder' => 'https://exemple.com/photo.jpg',
+                'constraints' => [
+                    new File([
+                        'maxSize' => '4M',
+                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+                        'mimeTypesMessage' => 'Veuillez téléverser une image valide (jpg, png, webp, gif).',
+                    ]),
                 ],
             ])
             ->add('agreeTerms', CheckboxType::class, [

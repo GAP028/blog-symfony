@@ -16,7 +16,7 @@
 
             {% if post.picture %}
                 <div class="mb-4">
-                    <img src="{{ post.picture }}" alt="{{ post.title }}" class="img-fluid post-image w-100" style="height: 420px;">
+                    <img src="{{ asset('uploads/posts/' ~ post.picture) }}" alt="{{ post.title }}" class="img-fluid post-image w-100" style="height: 420px;">
                 </div>
             {% endif %}
 

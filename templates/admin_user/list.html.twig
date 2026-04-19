@@ -37,7 +37,7 @@
                                 <tr>
                                     <td>
                                         {% if user.profilePicture %}
-                                            <img src="{{ user.profilePicture }}" alt="Photo de profil" class="user-avatar">
+                                            <img src="{{ asset('uploads/profiles/' ~ user.profilePicture) }}" alt="Photo de profil" class="user-avatar">
                                         {% else %}
                                             <img src="https://via.placeholder.com/80x80?text=User" alt="Photo de profil" class="user-avatar">
                                         {% endif %}

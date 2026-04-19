@@ -6,10 +6,11 @@ use App\Entity\Category;
 use App\Entity\Post;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class PostType extends AbstractType
 {
@@ -33,11 +34,16 @@ class PostType extends AbstractType
                 'label' => 'Date de publication',
                 'widget' => 'single_text',
             ])
-            ->add('picture', UrlType::class, [
-                'label' => 'Image de couverture (URL)',
+            ->add('pictureFile', FileType::class, [
+                'label' => 'Image de couverture',
+                'mapped' => false,
                 'required' => false,
-                'attr' => [
-                    'placeholder' => 'https://exemple.com/image.jpg',
+                'constraints' => [
+                    new File([
+                        'maxSize' => '4M',
+                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+                        'mimeTypesMessage' => 'Veuillez téléverser une image valide (jpg, png, webp, gif).',
+                    ]),
                 ],
             ])
             ->add('category', EntityType::class, [

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\AdminActionLog;
 use App\Entity\User;
 use App\Form\AdminUserType;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Attribute\IsGranted;
@@ -31,7 +32,8 @@ final class AdminUserController extends AbstractController
     public function newUser(
         Request $request,
         EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
+        FileUploader $fileUploader
     ): Response {
         $user = new User();
 
@@ -45,10 +47,16 @@ final class AdminUserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('plainPassword')->getData();
             $selectedRole = $form->get('role')->getData();
+            $profilePictureFile = $form->get('profilePictureFile')->getData();
 
             $user->setPassword(
                 $passwordHasher->hashPassword($user, $plainPassword)
             );
+
+            if ($profilePictureFile) {
+                $filename = $fileUploader->upload($profilePictureFile, 'profiles');
+                $user->setProfilePicture($filename);
+            }
 
             $user->setRoles([$selectedRole]);
             $user->setCreatedAt(new \DateTimeImmutable());
@@ -72,7 +80,8 @@ final class AdminUserController extends AbstractController
         User $user,
         Request $request,
         EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
+        FileUploader $fileUploader
     ): Response {
         $currentRole = in_array('ROLE_ADMIN', $user->getRoles(), true) ? 'ROLE_ADMIN' : 'ROLE_USER';
 
@@ -86,11 +95,17 @@ final class AdminUserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('plainPassword')->getData();
             $selectedRole = $form->get('role')->getData();
+            $profilePictureFile = $form->get('profilePictureFile')->getData();
 
             if (!empty($plainPassword)) {
                 $user->setPassword(
                     $passwordHasher->hashPassword($user, $plainPassword)
                 );
+            }
+
+            if ($profilePictureFile) {
+                $filename = $fileUploader->upload($profilePictureFile, 'profiles');
+                $user->setProfilePicture($filename);
             }
 
             $user->setRoles([$selectedRole]);
