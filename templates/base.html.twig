@@ -7,165 +7,212 @@
 
         {% block stylesheets %}
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-            <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
 
             <style>
                 :root {
-                    --bg-main: #0d0b10;
-                    --bg-secondary: #15121a;
-                    --bg-card: rgba(24, 20, 28, 0.92);
-                    --gold: #c9a96a;
-                    --gold-soft: #e0c58d;
-                    --text-main: #f3eee4;
-                    --text-soft: #cfc6b8;
-                    --border: rgba(201, 169, 106, 0.35);
-                    --danger-dark: #6c1f1f;
+                    --bg-main: #09070c;
+                    --bg-overlay: rgba(7, 6, 10, 0.88);
+                    --panel: rgba(20, 16, 24, 0.92);
+                    --panel-soft: rgba(31, 24, 38, 0.86);
+                    --gold: #c9a35f;
+                    --gold-light: #ecd5a4;
+                    --gold-dark: #8e6b33;
+                    --text-main: #f7f1e6;
+                    --text-soft: #d7cfc0;
+                    --muted: #b7ab96;
+                    --border: rgba(201, 163, 95, 0.28);
+                    --danger: #7b1f1f;
+                    --shadow: 0 14px 34px rgba(0,0,0,0.42);
                 }
 
                 body {
                     background:
-                        linear-gradient(rgba(7, 7, 10, 0.86), rgba(7, 7, 10, 0.94)),
+                        linear-gradient(var(--bg-overlay), rgba(10, 8, 14, 0.94)),
                         url('https://images.unsplash.com/photo-1518562180175-34a163b1a9a6?auto=format&fit=crop&w=1600&q=80') center/cover fixed no-repeat;
                     color: var(--text-main);
                     font-family: 'Cormorant Garamond', serif;
                     min-height: 100vh;
                 }
 
-                h1, h2, h3, h4, h5, .navbar-brand, .section-title, .btn {
+                h1, h2, h3, h4, h5, h6, .navbar-brand, .section-title, .btn, .brand-mark {
                     font-family: 'Cinzel', serif;
                     letter-spacing: 0.4px;
                 }
 
                 .navbar {
-                    background: rgba(10, 8, 14, 0.92) !important;
-                    backdrop-filter: blur(6px);
+                    background: rgba(8, 7, 12, 0.88) !important;
+                    backdrop-filter: blur(8px);
                     border-bottom: 1px solid var(--border);
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.28);
                 }
 
                 .navbar-brand {
-                    color: var(--gold-soft) !important;
-                    font-size: 1.25rem;
-                    font-weight: 700;
+                    color: var(--gold-light) !important;
+                    font-weight: 800;
+                    font-size: 1.2rem;
                 }
 
                 .nav-link {
                     color: var(--text-soft) !important;
-                    transition: 0.25s ease;
+                    transition: all 0.2s ease-in-out;
                 }
 
                 .nav-link:hover {
-                    color: var(--gold-soft) !important;
+                    color: var(--gold-light) !important;
+                    transform: translateY(-1px);
                 }
 
-                .gothic-hero {
-                    background:
-                        linear-gradient(135deg, rgba(18, 14, 22, 0.95), rgba(41, 27, 18, 0.88));
-                    border: 1px solid var(--border);
-                    border-radius: 24px;
-                    padding: 3.5rem 2rem;
-                    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
-                    margin-bottom: 2rem;
+                .hero-panel {
                     position: relative;
+                    background:
+                        linear-gradient(135deg, rgba(18, 13, 20, 0.96), rgba(44, 29, 18, 0.88));
+                    border: 1px solid var(--border);
+                    border-radius: 28px;
+                    padding: 4rem 2.25rem;
+                    box-shadow: var(--shadow);
                     overflow: hidden;
                 }
 
-                .gothic-hero::before {
+                .hero-panel::before {
                     content: "";
                     position: absolute;
                     inset: 0;
-                    background: radial-gradient(circle at top right, rgba(201,169,106,0.12), transparent 35%);
+                    background:
+                        radial-gradient(circle at top right, rgba(236, 213, 164, 0.14), transparent 28%),
+                        radial-gradient(circle at bottom left, rgba(201, 163, 95, 0.10), transparent 30%);
                     pointer-events: none;
                 }
 
+                .hero-kicker {
+                    color: var(--gold-light);
+                    text-transform: uppercase;
+                    font-size: 0.9rem;
+                    letter-spacing: 2px;
+                    margin-bottom: 0.75rem;
+                }
+
+                .hero-title {
+                    font-size: clamp(2.2rem, 5vw, 4.4rem);
+                    font-weight: 800;
+                    line-height: 1.05;
+                    margin-bottom: 1rem;
+                }
+
+                .hero-subtitle {
+                    color: var(--text-soft);
+                    font-size: 1.35rem;
+                    max-width: 760px;
+                    margin: 0 auto 1.8rem auto;
+                }
+
                 .gothic-card {
-                    background: var(--bg-card);
+                    background: var(--panel);
                     border: 1px solid var(--border);
                     border-radius: 22px;
-                    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+                    box-shadow: var(--shadow);
                     color: var(--text-main);
                 }
 
+                .gothic-card-soft {
+                    background: var(--panel-soft);
+                    border: 1px solid var(--border);
+                    border-radius: 20px;
+                    box-shadow: 0 10px 24px rgba(0,0,0,0.26);
+                }
+
                 .section-title {
-                    color: var(--gold-soft);
+                    color: var(--gold-light);
                     font-weight: 700;
+                    margin-bottom: 1rem;
+                }
+
+                .soft-text {
+                    color: var(--text-soft);
+                }
+
+                .meta-text {
+                    color: var(--muted);
+                    font-size: 0.98rem;
                 }
 
                 .text-gold {
-                    color: var(--gold-soft);
+                    color: var(--gold-light);
                 }
 
                 .btn-gold {
-                    background: linear-gradient(135deg, #9f7b3f, #d6b47a);
+                    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+                    color: #130e09;
                     border: none;
-                    color: #1a1410;
                     font-weight: 700;
+                    border-radius: 999px;
+                    padding-inline: 1.2rem;
                 }
 
                 .btn-gold:hover {
-                    background: linear-gradient(135deg, #b8904d, #ebca8f);
-                    color: #120e0c;
-                }
-
-                .btn-dark-red {
-                    background: linear-gradient(135deg, #4b1111, #7a2323);
-                    border: none;
-                    color: #fff3e6;
-                }
-
-                .btn-dark-red:hover {
-                    background: linear-gradient(135deg, #5f1717, #8d2c2c);
-                    color: #fff;
+                    background: linear-gradient(135deg, #b58845, #e0bf82);
+                    color: #120d08;
                 }
 
                 .btn-outline-gold {
                     border: 1px solid var(--gold);
-                    color: var(--gold-soft);
+                    color: var(--gold-light);
                     background: transparent;
+                    border-radius: 999px;
+                    padding-inline: 1.2rem;
                 }
 
                 .btn-outline-gold:hover {
-                    background: rgba(201, 169, 106, 0.12);
-                    color: #fff5dd;
-                    border-color: var(--gold-soft);
+                    background: rgba(201, 163, 95, 0.14);
+                    color: #fff2d2;
+                    border-color: var(--gold-light);
                 }
 
-                .info-panel {
-                    background: rgba(11, 10, 15, 0.78);
-                    border: 1px solid var(--border);
-                    border-radius: 18px;
-                    color: var(--text-soft);
+                .btn-dark-red {
+                    background: linear-gradient(135deg, #561616, var(--danger));
+                    color: #fff4ea;
+                    border: none;
+                    border-radius: 999px;
+                    padding-inline: 1.2rem;
+                }
+
+                .btn-dark-red:hover {
+                    background: linear-gradient(135deg, #6a1a1a, #9a2a2a);
+                    color: white;
                 }
 
                 .post-image {
-                    height: 240px;
+                    height: 250px;
+                    width: 100%;
                     object-fit: cover;
                     border-radius: 16px;
-                    border: 1px solid rgba(201, 169, 106, 0.18);
+                    border: 1px solid rgba(201, 163, 95, 0.18);
                 }
 
                 .form-card {
-                    max-width: 850px;
+                    max-width: 880px;
                     margin: 0 auto;
                 }
 
                 .form-control,
                 .form-select,
                 textarea {
-                    background: rgba(255,255,255,0.06) !important;
+                    background: rgba(255,255,255,0.05) !important;
                     color: var(--text-main) !important;
-                    border: 1px solid rgba(201,169,106,0.24) !important;
+                    border: 1px solid rgba(201,163,95,0.24) !important;
                     border-radius: 14px !important;
+                    min-height: 46px;
                 }
 
                 .form-control:focus,
                 .form-select:focus,
                 textarea:focus {
-                    box-shadow: 0 0 0 0.2rem rgba(201,169,106,0.18) !important;
+                    box-shadow: 0 0 0 0.2rem rgba(201, 163, 95, 0.16) !important;
                     border-color: var(--gold) !important;
                 }
 
                 label, .form-label {
-                    color: var(--gold-soft);
+                    color: var(--gold-light);
                     font-weight: 600;
                 }
 
@@ -175,37 +222,52 @@
                 }
 
                 .alert-info {
-                    background: rgba(34, 55, 82, 0.85);
-                    color: #e8f0ff;
+                    background: rgba(27, 48, 79, 0.86);
+                    color: #edf5ff;
                 }
 
                 .alert-success {
-                    background: rgba(25, 74, 43, 0.85);
-                    color: #effff4;
+                    background: rgba(24, 72, 41, 0.86);
+                    color: #effff2;
                 }
 
                 .alert-warning {
-                    background: rgba(90, 62, 15, 0.88);
+                    background: rgba(107, 76, 20, 0.88);
                     color: #fff7e6;
                 }
 
-                .border-gold {
-                    border: 1px solid var(--border);
+                .signature-footer {
+                    margin-top: 4rem;
+                    padding: 1.5rem 0 2rem;
+                    border-top: 1px solid var(--border);
+                    color: var(--muted);
                 }
 
-                .soft-text {
+                .signature-name {
+                    color: var(--gold-light);
+                    font-weight: 700;
+                    font-size: 1.05rem;
+                }
+
+                .brand-mark {
+                    font-size: 0.8rem;
+                    text-transform: uppercase;
+                    letter-spacing: 2px;
+                    color: var(--gold);
+                    margin-bottom: 0.3rem;
+                }
+
+                .quote-box {
+                    border-left: 3px solid var(--gold);
+                    padding-left: 1rem;
                     color: var(--text-soft);
-                }
-
-                .small-meta {
-                    color: #d0b98a;
-                    font-size: 0.95rem;
+                    font-style: italic;
                 }
             </style>
         {% endblock %}
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg shadow-sm">
+        <nav class="navbar navbar-expand-lg">
             <div class="container">
                 <a class="navbar-brand" href="{{ path('app_home') }}">Chroniques du Royaume</a>
 
@@ -235,10 +297,10 @@
                     <ul class="navbar-nav ms-auto">
                         {% if app.user %}
                             <li class="nav-item">
-                                <span class="nav-link">Noble connecté : {{ app.user.email }}</span>
+                                <span class="nav-link">Connecté : {{ app.user.email }}</span>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-warning" href="{{ path('app_logout') }}">Quitter le royaume</a>
+                                <a class="nav-link text-warning" href="{{ path('app_logout') }}">Déconnexion</a>
                             </li>
                         {% else %}
                             <li class="nav-item">
@@ -256,6 +318,12 @@
         <main class="py-5">
             {% block body %}{% endblock %}
         </main>
+
+        <footer class="container signature-footer text-center">
+            <div class="brand-mark">Projet réalisé par</div>
+            <div class="signature-name">Gomas Alain-Patrick</div>
+            <div>Développeur PHP Symfony — Projet portfolio / démonstration recruteur</div>
+        </footer>
 
         {% block javascripts %}
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

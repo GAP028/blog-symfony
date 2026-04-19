@@ -4,10 +4,11 @@
 
 {% block body %}
     <div class="container">
-        <div class="gothic-hero text-center">
-            <h1 class="display-4 fw-bold mb-3">Le Trône des Chroniques</h1>
-            <p class="lead soft-text mb-4">
-                Entrez dans un monde de stratégies, de grandes maisons, de chroniques royales et de murmures venus du Nord.
+        <div class="hero-panel text-center mb-5">
+            <div class="hero-kicker">Portfolio — Univers Fantasy</div>
+            <h1 class="hero-title">Les Chroniques du Royaume</h1>
+            <p class="hero-subtitle">
+                Un blog immersif inspiré d’un univers médiéval-fantastique, développé avec Symfony, Bootstrap et une gestion complète des rôles, des articles, des maisons et des commentaires.
             </p>
 
             {% if app.user %}
@@ -16,13 +17,13 @@
                 </div>
 
                 <div>
-                    <a href="{{ path('post_list') }}" class="btn btn-gold btn-lg me-2">Lire les chroniques</a>
+                    <a href="{{ path('post_list') }}" class="btn btn-gold btn-lg me-2">Entrer dans les chroniques</a>
                     <a href="{{ path('app_logout') }}" class="btn btn-outline-gold btn-lg">Quitter la cour</a>
                 </div>
             {% else %}
                 <div>
-                    <a href="{{ path('app_login') }}" class="btn btn-gold btn-lg me-2">Entrer dans la cour</a>
-                    <a href="{{ path('app_register') }}" class="btn btn-outline-gold btn-lg">Rejoindre le royaume</a>
+                    <a href="{{ path('app_login') }}" class="btn btn-gold btn-lg me-2">Se connecter</a>
+                    <a href="{{ path('app_register') }}" class="btn btn-outline-gold btn-lg">Créer un compte</a>
                 </div>
             {% endif %}
         </div>
@@ -32,33 +33,37 @@
                 <div class="gothic-card p-4 h-100">
                     <h3 class="section-title">Les Chroniques</h3>
                     <p class="soft-text">
-                        Parcourez les récits du royaume, les batailles, les alliances et les trahisons.
+                        Explorez les récits du royaume, les intrigues politiques, les alliances et les batailles.
                     </p>
+                    <div class="quote-box mb-3">
+                        “Chaque chronique est une trace laissée dans l’histoire du royaume.”
+                    </div>
                     <a href="{{ path('post_list') }}" class="btn btn-gold">Voir les chroniques</a>
                 </div>
             </div>
 
             <div class="col-lg-4">
                 <div class="gothic-card p-4 h-100">
-                    <h3 class="section-title">Les Maisons</h3>
+                    <h3 class="section-title">Les Grandes Maisons</h3>
                     <p class="soft-text">
-                        Découvrez les grandes maisons, leurs valeurs, leurs emblèmes et leurs territoires.
+                        Découvrez les maisons majeures, leurs valeurs, leur prestige et leurs ambitions.
                     </p>
+                    <div class="quote-box mb-3">
+                        “Les maisons façonnent le destin des royaumes.”
+                    </div>
                     <a href="{{ path('category_list') }}" class="btn btn-outline-gold">Voir les maisons</a>
                 </div>
             </div>
 
             <div class="col-lg-4">
                 <div class="gothic-card p-4 h-100">
-                    <h3 class="section-title">Le Mur</h3>
+                    <h3 class="section-title">L’Héritage du Développeur</h3>
                     <p class="soft-text">
-                        Les visiteurs observent. Les membres commentent. Les administrateurs gouvernent.
+                        Ce projet a été conçu comme une démonstration de compétences Symfony à destination des recruteurs.
                     </p>
-                    {% if app.user %}
-                        <span class="small-meta">Statut actuel : membre du royaume</span>
-                    {% else %}
-                        <span class="small-meta">Statut actuel : voyageur de passage</span>
-                    {% endif %}
+                    <div class="quote-box">
+                        Créé et structuré par <strong class="text-gold">Gomas Alain-Patrick</strong>.
+                    </div>
                 </div>
             </div>
         </div>
@@ -67,11 +72,15 @@
             <div class="gothic-card p-4 mt-4">
                 <h3 class="section-title">Salle du Conseil</h3>
                 <p class="soft-text">
-                    En tant qu’administrateur, vous dirigez les chroniques et les maisons du royaume.
+                    En tant qu’administrateur, vous gouvernez les chroniques du royaume et les grandes maisons.
                 </p>
                 <a href="{{ path('post_new') }}" class="btn btn-gold me-2">Nouvelle chronique</a>
                 <a href="{{ path('category_new') }}" class="btn btn-dark-red">Nouvelle maison</a>
             </div>
         {% endif %}
+    </div>
+        <div class="text-center mt-5">
+    <p class="meta-text mb-1">Projet imaginé, structuré et réalisé par</p>
+    <h4 class="text-gold mb-0">Gomas Alain-Patrick</h4>
     </div>
 {% endblock %}
