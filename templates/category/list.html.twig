@@ -20,9 +20,21 @@
                     <div class="col-md-6 col-xl-4">
                         <div class="gothic-card p-4 h-100">
                             <h4 class="text-gold">{{ category.name }}</h4>
-                            <p class="soft-text mb-0">
+                            <p class="soft-text mb-3">
                                 {{ category.description ?: 'Aucune chronique n’évoque encore cette maison.' }}
                             </p>
+
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <div class="d-flex gap-2 flex-wrap mt-3">
+                                    <a href="{{ path('category_edit', {'id': category.id}) }}" class="btn btn-gold btn-sm">
+                                        Modifier
+                                    </a>
+
+                                    <form method="post" action="{{ path('category_delete', {'id': category.id}) }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cette catégorie ?');">
+                                        <button type="submit" class="btn btn-dark-red btn-sm">Supprimer</button>
+                                    </form>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 {% endfor %}

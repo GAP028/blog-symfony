@@ -16,6 +16,7 @@ class AdminUserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $isEdit = $options['is_edit'];
+        $currentRole = $options['current_role'];
 
         $builder
             ->add('firstName', null, [
@@ -31,33 +32,32 @@ class AdminUserType extends AbstractType
                 'label' => 'Photo de profil (URL)',
                 'required' => false,
             ])
-            ->add('roles', ChoiceType::class, [
-                'label' => 'Rôle',
+            ->add('role', ChoiceType::class, [
+                'label' => 'Rôle principal',
+                'mapped' => false,
                 'choices' => [
                     'Utilisateur' => 'ROLE_USER',
                     'Administrateur' => 'ROLE_ADMIN',
                 ],
-                'multiple' => true,
-                'expanded' => false,
+                'data' => $currentRole,
             ])
             ->add('isActive', null, [
                 'label' => 'Compte actif',
                 'required' => false,
             ])
+            ->add('plainPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'mapped' => false,
+                'required' => !$isEdit,
+                'first_options' => [
+                    'label' => 'Mot de passe',
+                ],
+                'second_options' => [
+                    'label' => 'Confirmation du mot de passe',
+                ],
+                'invalid_message' => 'Les mots de passe doivent être identiques.',
+            ])
         ;
-
-        $builder->add('plainPassword', RepeatedType::class, [
-            'type' => PasswordType::class,
-            'mapped' => false,
-            'required' => !$isEdit,
-            'first_options' => [
-                'label' => 'Mot de passe',
-            ],
-            'second_options' => [
-                'label' => 'Confirmation du mot de passe',
-            ],
-            'invalid_message' => 'Les mots de passe doivent être identiques.',
-        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -65,6 +65,7 @@ class AdminUserType extends AbstractType
         $resolver->setDefaults([
             'data_class' => User::class,
             'is_edit' => false,
+            'current_role' => 'ROLE_USER',
         ]);
     }
 }

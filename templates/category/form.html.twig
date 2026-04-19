@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Créer une maison{% endblock %}
+{% block title %}{{ pageTitle }}{% endblock %}
 
 {% block body %}
     <div class="container">
         <div class="gothic-card p-4 p-md-5 form-card">
             <div class="text-center mb-4">
                 <div class="brand-mark">Administration</div>
-                <h1 class="section-title mb-2">Créer une maison / catégorie</h1>
+                <h1 class="section-title mb-2">{{ pageTitle }}</h1>
                 <p class="soft-text mb-0">
-                    Ajoutez une nouvelle catégorie pour organiser les chroniques du royaume.
+                    Gérez les maisons et catégories qui structurent le royaume.
                 </p>
             </div>
 
@@ -25,7 +25,7 @@
 
                 <div class="d-flex gap-2 flex-wrap">
                     <button type="submit" class="btn btn-dark-red">Enregistrer</button>
-                    <a href="{{ path('category_list') }}" class="btn btn-outline-gold">Annuler</a>
+                    <a href="{{ path('category_list') }}" class="btn btn-outline-gold">Retour</a>
                 </div>
 
             {{ form_end(form) }}

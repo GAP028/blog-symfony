@@ -33,22 +33,29 @@ final class AdminUserController extends AbstractController
         UserPasswordHasherInterface $passwordHasher
     ): Response {
         $user = new User();
+
         $form = $this->createForm(AdminUserType::class, $user, [
             'is_edit' => false,
+            'current_role' => 'ROLE_USER',
         ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('plainPassword')->getData();
+            $selectedRole = $form->get('role')->getData();
 
             $user->setPassword(
                 $passwordHasher->hashPassword($user, $plainPassword)
             );
 
+            $user->setRoles([$selectedRole]);
             $user->setCreatedAt(new \DateTimeImmutable());
 
             $entityManager->persist($user);
             $entityManager->flush();
+
+            $this->addFlash('success', 'L’utilisateur a bien été ajouté.');
 
             return $this->redirectToRoute('admin_user_list');
         }
@@ -66,13 +73,18 @@ final class AdminUserController extends AbstractController
         EntityManagerInterface $entityManager,
         UserPasswordHasherInterface $passwordHasher
     ): Response {
+        $currentRole = in_array('ROLE_ADMIN', $user->getRoles(), true) ? 'ROLE_ADMIN' : 'ROLE_USER';
+
         $form = $this->createForm(AdminUserType::class, $user, [
             'is_edit' => true,
+            'current_role' => $currentRole,
         ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('plainPassword')->getData();
+            $selectedRole = $form->get('role')->getData();
 
             if (!empty($plainPassword)) {
                 $user->setPassword(
@@ -80,9 +92,12 @@ final class AdminUserController extends AbstractController
                 );
             }
 
+            $user->setRoles([$selectedRole]);
             $user->setUpdatedAt(new \DateTimeImmutable());
 
             $entityManager->flush();
+
+            $this->addFlash('success', 'L’utilisateur a bien été modifié.');
 
             return $this->redirectToRoute('admin_user_list');
         }
@@ -99,6 +114,8 @@ final class AdminUserController extends AbstractController
         $user->setIsActive(!$user->isActive());
         $entityManager->flush();
 
+        $this->addFlash('success', 'Le statut du compte a bien été mis à jour.');
+
         return $this->redirectToRoute('admin_user_list');
     }
 
@@ -107,6 +124,8 @@ final class AdminUserController extends AbstractController
     {
         $entityManager->remove($user);
         $entityManager->flush();
+
+        $this->addFlash('success', 'L’utilisateur a bien été supprimé.');
 
         return $this->redirectToRoute('admin_user_list');
     }
