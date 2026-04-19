@@ -1,16 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Formulaire catégorie{% endblock %}
+{% block title %}Nouvelle maison{% endblock %}
 
 {% block body %}
     <div class="container">
-        <div class="card p-4 form-card">
-            <h1 class="section-title">Formulaire catégorie</h1>
+        <div class="gothic-card p-4 form-card">
+            <h1 class="section-title">Créer une maison</h1>
 
             {{ form_start(form) }}
                 {{ form_widget(form) }}
-                <button type="submit" class="btn btn-warning mt-3">Enregistrer</button>
-                <a href="{{ path('category_list') }}" class="btn btn-secondary mt-3">Annuler</a>
+
+                <button type="submit" class="btn btn-dark-red mt-3">Enregistrer</button>
+                <a href="{{ path('category_list') }}" class="btn btn-outline-gold mt-3">Annuler</a>
             {{ form_end(form) }}
         </div>
     </div>

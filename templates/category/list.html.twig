@@ -1,30 +1,28 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des catégories{% endblock %}
+{% block title %}Maisons du Royaume{% endblock %}
 
 {% block body %}
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="section-title mb-0">Liste des catégories</h1>
+            <h1 class="section-title mb-0">Les Grandes Maisons</h1>
 
             {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('category_new') }}" class="btn btn-warning">Nouvelle catégorie</a>
+                <a href="{{ path('category_new') }}" class="btn btn-dark-red">Nouvelle maison</a>
             {% endif %}
         </div>
 
         {% if categories is empty %}
-            <div class="alert alert-info">Aucune catégorie enregistrée.</div>
+            <div class="alert alert-info">Aucune maison n’a été fondée.</div>
         {% else %}
             <div class="row g-4">
                 {% for category in categories %}
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card p-3 h-100">
-                            <div class="card-body">
-                                <h4 class="card-title">{{ category.name }}</h4>
-                                <p class="card-text">
-                                    {{ category.description ?: 'Aucune description disponible.' }}
-                                </p>
-                            </div>
+                    <div class="col-md-6 col-xl-4">
+                        <div class="gothic-card p-4 h-100">
+                            <h4 class="text-gold">{{ category.name }}</h4>
+                            <p class="soft-text mb-0">
+                                {{ category.description ?: 'Aucune chronique n’évoque encore cette maison.' }}
+                            </p>
                         </div>
                     </div>
                 {% endfor %}

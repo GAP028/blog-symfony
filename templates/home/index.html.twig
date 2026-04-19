@@ -1,54 +1,76 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil{% endblock %}
+{% block title %}Accueil du Royaume{% endblock %}
 
 {% block body %}
     <div class="container">
-        <div class="hero">
-            <h1 class="display-5 fw-bold">Bienvenue sur mon Blog Symfony</h1>
-            <p class="lead mt-3">
-                Projet Symfony avec authentification, rôles, articles, catégories et commentaires.
+        <div class="gothic-hero text-center">
+            <h1 class="display-4 fw-bold mb-3">Le Trône des Chroniques</h1>
+            <p class="lead soft-text mb-4">
+                Entrez dans un monde de stratégies, de grandes maisons, de chroniques royales et de murmures venus du Nord.
             </p>
 
             {% if app.user %}
-                <p class="mt-3 mb-4">
-                    Connecté en tant que <strong>{{ app.user.email }}</strong>
-                </p>
-                <a href="{{ path('post_list') }}" class="btn btn-light btn-lg me-2">Voir les articles</a>
-                <a href="{{ path('app_logout') }}" class="btn btn-outline-light btn-lg">Déconnexion</a>
+                <div class="alert alert-success d-inline-block px-4 py-3 mb-4">
+                    Vous êtes connecté en tant que <strong>{{ app.user.email }}</strong>
+                </div>
+
+                <div>
+                    <a href="{{ path('post_list') }}" class="btn btn-gold btn-lg me-2">Lire les chroniques</a>
+                    <a href="{{ path('app_logout') }}" class="btn btn-outline-gold btn-lg">Quitter la cour</a>
+                </div>
             {% else %}
-                <p class="mt-3 mb-4">
-                    Connectez-vous ou créez un compte pour interagir avec le blog.
-                </p>
-                <a href="{{ path('app_login') }}" class="btn btn-light btn-lg me-2">Connexion</a>
-                <a href="{{ path('app_register') }}" class="btn btn-outline-light btn-lg">Inscription</a>
+                <div>
+                    <a href="{{ path('app_login') }}" class="btn btn-gold btn-lg me-2">Entrer dans la cour</a>
+                    <a href="{{ path('app_register') }}" class="btn btn-outline-gold btn-lg">Rejoindre le royaume</a>
+                </div>
             {% endif %}
         </div>
 
         <div class="row g-4">
-            <div class="col-md-6">
-                <div class="card p-4 h-100">
-                    <h3 class="section-title">Articles</h3>
-                    <p>Consultez la liste des articles publiés sur le blog.</p>
-                    <a href="{{ path('post_list') }}" class="btn btn-primary">Voir les articles</a>
+            <div class="col-lg-4">
+                <div class="gothic-card p-4 h-100">
+                    <h3 class="section-title">Les Chroniques</h3>
+                    <p class="soft-text">
+                        Parcourez les récits du royaume, les batailles, les alliances et les trahisons.
+                    </p>
+                    <a href="{{ path('post_list') }}" class="btn btn-gold">Voir les chroniques</a>
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <div class="card p-4 h-100">
-                    <h3 class="section-title">Catégories</h3>
-                    <p>Explorez les catégories disponibles pour naviguer plus facilement.</p>
-                    <a href="{{ path('category_list') }}" class="btn btn-secondary">Voir les catégories</a>
+            <div class="col-lg-4">
+                <div class="gothic-card p-4 h-100">
+                    <h3 class="section-title">Les Maisons</h3>
+                    <p class="soft-text">
+                        Découvrez les grandes maisons, leurs valeurs, leurs emblèmes et leurs territoires.
+                    </p>
+                    <a href="{{ path('category_list') }}" class="btn btn-outline-gold">Voir les maisons</a>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="gothic-card p-4 h-100">
+                    <h3 class="section-title">Le Mur</h3>
+                    <p class="soft-text">
+                        Les visiteurs observent. Les membres commentent. Les administrateurs gouvernent.
+                    </p>
+                    {% if app.user %}
+                        <span class="small-meta">Statut actuel : membre du royaume</span>
+                    {% else %}
+                        <span class="small-meta">Statut actuel : voyageur de passage</span>
+                    {% endif %}
                 </div>
             </div>
         </div>
 
         {% if is_granted('ROLE_ADMIN') %}
-            <div class="card p-4 mt-4">
-                <h3 class="section-title">Espace administrateur</h3>
-                <p>Vous avez accès à la gestion des articles et des catégories.</p>
-                <a href="{{ path('post_new') }}" class="btn btn-success me-2">Nouvel article</a>
-                <a href="{{ path('category_new') }}" class="btn btn-warning">Nouvelle catégorie</a>
+            <div class="gothic-card p-4 mt-4">
+                <h3 class="section-title">Salle du Conseil</h3>
+                <p class="soft-text">
+                    En tant qu’administrateur, vous dirigez les chroniques et les maisons du royaume.
+                </p>
+                <a href="{{ path('post_new') }}" class="btn btn-gold me-2">Nouvelle chronique</a>
+                <a href="{{ path('category_new') }}" class="btn btn-dark-red">Nouvelle maison</a>
             </div>
         {% endif %}
     </div>
