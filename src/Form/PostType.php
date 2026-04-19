@@ -36,7 +36,7 @@ class PostType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('picture', UrlType::class, [
-                'label' => 'Image par URL',
+                'label' => 'Image de couverture (URL)',
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'https://exemple.com/image.jpg',
@@ -47,11 +47,11 @@ class PostType extends AbstractType
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [
-                    new File([
-                        'maxSize' => '4M',
-                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
-                        'mimeTypesMessage' => 'Veuillez téléverser une image valide (jpg, png, webp, gif).',
-                    ]),
+                    new File(
+                        maxSize: '4M',
+                        mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+                        mimeTypesMessage: 'Veuillez téléverser une image valide (jpg, png, webp, gif).'
+                    ),
                 ],
             ])
             ->add('category', EntityType::class, [
@@ -59,8 +59,7 @@ class PostType extends AbstractType
                 'class' => Category::class,
                 'choice_label' => 'name',
                 'placeholder' => 'Choisir une catégorie',
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -40,7 +40,7 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('profilePicture', UrlType::class, [
-                'label' => 'Photo de profil par URL',
+                'label' => 'Photo de profil (URL)',
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'https://exemple.com/photo.jpg',
@@ -51,11 +51,11 @@ class RegistrationFormType extends AbstractType
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [
-                    new File([
-                        'maxSize' => '4M',
-                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
-                        'mimeTypesMessage' => 'Veuillez téléverser une image valide (jpg, png, webp, gif).',
-                    ]),
+                    new File(
+                        maxSize: '4M',
+                        mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+                        mimeTypesMessage: 'Veuillez téléverser une image valide (jpg, png, webp, gif).'
+                    ),
                 ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
@@ -85,8 +85,7 @@ class RegistrationFormType extends AbstractType
                         max: 4096
                     ),
                 ],
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
