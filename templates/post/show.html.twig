@@ -43,7 +43,7 @@
             {% if post.comments is empty %}
                 <div class="alert alert-info">Le silence règne encore sur cette chronique.</div>
             {% else %}
-                {% for comment in post.comments %}
+                {% for comment in post.comments if comment.status == 'validé' %}
                     <div class="info-panel p-3 mb-3">
                         <p class="mb-2">{{ comment.content }}</p>
                         <small class="small-meta">

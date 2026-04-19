@@ -21,48 +21,48 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create('fr_FR');
 
-        // ADMIN
         $admin = new User();
-        $admin->setEmail('admin@test.com');
+        $admin->setEmail('admin@gomas-portfolio.com');
         $admin->setRoles(['ROLE_ADMIN']);
         $admin->setPassword(
             $this->passwordHasher->hashPassword($admin, 'Admin1234')
         );
-        $admin->setFirstName('Admin');
-        $admin->setLastName('Principal');
+        $admin->setFirstName('Gomas');
+        $admin->setLastName('Alain-Patrick');
         $admin->setProfilePicture('https://images.unsplash.com/photo-1500648767791-00dcc994a43e');
         $admin->setCreatedAt(new \DateTimeImmutable());
+        $admin->setIsActive(true);
         $manager->persist($admin);
 
-        // USER NORMAL
         $user = new User();
-        $user->setEmail('user@test.com');
+        $user->setEmail('user@gomas-portfolio.com');
         $user->setRoles(['ROLE_USER']);
         $user->setPassword(
             $this->passwordHasher->hashPassword($user, 'User1234')
         );
-        $user->setFirstName('Utilisateur');
-        $user->setLastName('Normal');
+        $user->setFirstName('Lecteur');
+        $user->setLastName('Du Royaume');
         $user->setProfilePicture('https://images.unsplash.com/photo-1494790108377-be9c29b29330');
         $user->setCreatedAt(new \DateTimeImmutable());
+        $user->setIsActive(true);
         $manager->persist($user);
 
-        // CATEGORIES
         $categories = [];
 
-        for ($i = 0; $i < 5; $i++) {
+        $houseNames = ['Stark', 'Lannister', 'Targaryen', 'Baratheon', 'Tyrell'];
+
+        foreach ($houseNames as $houseName) {
             $category = new Category();
-            $category->setName($faker->unique()->word());
-            $category->setDescription($faker->sentence(10));
+            $category->setName($houseName);
+            $category->setDescription($faker->sentence(12));
             $manager->persist($category);
             $categories[] = $category;
         }
 
-        // POSTS
         for ($i = 0; $i < 10; $i++) {
             $post = new Post();
             $post->setTitle($faker->sentence(6));
-            $post->setContent($faker->paragraphs(3, true));
+            $post->setContent($faker->paragraphs(4, true));
             $post->setPublishedAt(\DateTimeImmutable::createFromMutable($faker->dateTimeThisYear()));
             $post->setPicture('https://picsum.photos/seed/post' . $i . '/900/500');
             $post->setAuthor($admin);

@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -12,8 +13,20 @@ class CategoryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('description')
+            ->add('name', null, [
+                'label' => 'Nom de la maison / catégorie',
+                'attr' => [
+                    'placeholder' => 'Exemple : Stark, Lannister, Actualités...',
+                ],
+            ])
+            ->add('description', TextareaType::class, [
+                'label' => 'Description',
+                'required' => false,
+                'attr' => [
+                    'rows' => 5,
+                    'placeholder' => 'Décrivez cette catégorie...',
+                ],
+            ])
         ;
     }
 

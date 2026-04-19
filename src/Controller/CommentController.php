@@ -29,7 +29,7 @@ final class CommentController extends AbstractController
             $comment->setAuthor($this->getUser());
             $comment->setPost($post);
             $comment->setCreatedAt(new \DateTimeImmutable());
-            $comment->setStatus('validé');
+            $comment->setStatus('en attente');
 
             $entityManager->persist($comment);
             $entityManager->flush();

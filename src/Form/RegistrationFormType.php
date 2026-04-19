@@ -22,13 +22,13 @@ class RegistrationFormType extends AbstractType
             ->add('firstName', null, [
                 'label' => 'Prénom',
                 'attr' => [
-                    'placeholder' => 'Entrez votre prénom',
+                    'placeholder' => 'Votre prénom',
                 ],
             ])
             ->add('lastName', null, [
                 'label' => 'Nom',
                 'attr' => [
-                    'placeholder' => 'Entrez votre nom',
+                    'placeholder' => 'Votre nom',
                 ],
             ])
             ->add('email', null, [
@@ -48,9 +48,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'J’accepte les conditions d’utilisation',
                 'mapped' => false,
                 'constraints' => [
-                    new IsTrue(
-                        message: 'Vous devez accepter les conditions.'
-                    ),
+                    new IsTrue(message: 'Vous devez accepter les conditions.'),
                 ],
             ])
             ->add('plainPassword', RepeatedType::class, [
@@ -59,20 +57,14 @@ class RegistrationFormType extends AbstractType
                 'invalid_message' => 'Les mots de passe doivent être identiques.',
                 'first_options' => [
                     'label' => 'Mot de passe',
-                    'attr' => [
-                        'placeholder' => 'Choisissez un mot de passe',
-                    ],
+                    'attr' => ['placeholder' => 'Choisissez un mot de passe'],
                 ],
                 'second_options' => [
                     'label' => 'Confirmation du mot de passe',
-                    'attr' => [
-                        'placeholder' => 'Confirmez le mot de passe',
-                    ],
+                    'attr' => ['placeholder' => 'Confirmez le mot de passe'],
                 ],
                 'constraints' => [
-                    new NotBlank(
-                        message: 'Veuillez saisir un mot de passe'
-                    ),
+                    new NotBlank(message: 'Veuillez saisir un mot de passe'),
                     new Length(
                         min: 6,
                         minMessage: 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
