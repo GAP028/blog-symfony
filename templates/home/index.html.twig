@@ -68,6 +68,67 @@
             </div>
         </div>
 
+        <div class="gothic-card p-4 mt-4">
+            <h3 class="section-title">Guide des rôles et fonctionnalités</h3>
+            <p class="soft-text mb-4">
+                Cette section permet aux recruteurs et aux évaluateurs de comprendre rapidement les différents niveaux d’accès disponibles dans l’application ainsi que les fonctionnalités associées à chaque rôle.
+            </p>
+
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="gothic-card p-4 h-100">
+                        <h4 class="text-gold mb-3">Visiteur</h4>
+                        <p class="soft-text">
+                            Le visiteur est un utilisateur non connecté. Il peut consulter librement le contenu public du site.
+                        </p>
+                        <ul class="soft-text mb-0">
+                            <li>Voir la page d’accueil</li>
+                            <li>Consulter les chroniques</li>
+                            <li>Consulter les maisons / catégories</li>
+                            <li>Voir le détail d’un article</li>
+                            <li>Voir les commentaires validés</li>
+                            <li>Accéder aux pages de connexion et d’inscription</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="gothic-card p-4 h-100">
+                        <h4 class="text-gold mb-3">Utilisateur connecté</h4>
+                        <p class="soft-text">
+                            L’utilisateur connecté possède un compte standard et peut interagir davantage avec l’application.
+                        </p>
+                        <ul class="soft-text mb-0">
+                            <li>Se connecter / se déconnecter</li>
+                            <li>Consulter son profil</li>
+                            <li>Ajouter des commentaires</li>
+                            <li>Voir sa photo de profil</li>
+                            <li>Participer au contenu du site selon les permissions définies</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="gothic-card p-4 h-100">
+                        <h4 class="text-gold mb-3">Administrateur</h4>
+                        <p class="soft-text">
+                            L’administrateur dispose d’un accès complet à la gestion du blog et à la modération.
+                        </p>
+                        <ul class="soft-text mb-0">
+                            <li>Créer, modifier et supprimer des chroniques</li>
+                            <li>Créer, modifier et supprimer des catégories</li>
+                            <li>Ajouter, modifier et supprimer des utilisateurs</li>
+                            <li>Changer les rôles des utilisateurs</li>
+                            <li>Activer ou désactiver des comptes</li>
+                            <li>Valider, refuser ou supprimer des commentaires</li>
+                            <li>Accéder au journal des actions administrateur</li>
+                            <li>Uploader des images ou utiliser des liens d’images</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         {% if is_granted('ROLE_ADMIN') %}
             <div class="gothic-card p-4 mt-4">
                 <h3 class="section-title">Salle du Conseil</h3>
@@ -79,6 +140,7 @@
                     <a href="{{ path('category_new') }}" class="btn btn-dark-red">Nouvelle maison</a>
                     <a href="{{ path('admin_user_list') }}" class="btn btn-outline-gold">Gérer les utilisateurs</a>
                     <a href="{{ path('admin_comment_list') }}" class="btn btn-outline-gold">Modérer les commentaires</a>
+                    <a href="{{ path('admin_log_list') }}" class="btn btn-outline-gold">Voir le journal admin</a>
                 </div>
             </div>
         {% endif %}
@@ -99,6 +161,8 @@
                 <li>Gestion des rôles : administrateur, utilisateur connecté, visiteur</li>
                 <li>Gestion des chroniques, maisons/catégories et commentaires</li>
                 <li>Espace d’administration pour gérer les utilisateurs et modérer les commentaires</li>
+                <li>Journal des actions administrateur pour la traçabilité</li>
+                <li>Upload d’images ou utilisation de liens d’images</li>
                 <li>Interface personnalisée inspirée d’un univers médiéval-fantastique</li>
             </ul>
 
