@@ -7,7 +7,7 @@
         <div class="gothic-card p-4 mb-4">
             <h1 class="mb-3 text-gold">{{ post.title }}</h1>
 
-            <p class="small-meta">
+            <p class="meta-text">
                 Publié le {{ post.publishedAt ? post.publishedAt|date('d/m/Y H:i') : 'date inconnue' }}
             </p>
 
@@ -43,15 +43,25 @@
             {% if post.comments is empty %}
                 <div class="alert alert-info">Le silence règne encore sur cette chronique.</div>
             {% else %}
-                {% for comment in post.comments if comment.status == 'validé' %}
-                    <div class="info-panel p-3 mb-3">
-                        <p class="mb-2">{{ comment.content }}</p>
-                        <small class="small-meta">
-                            Par {{ comment.author ? comment.author.email : 'inconnu' }}
-                            le {{ comment.createdAt ? comment.createdAt|date('d/m/Y H:i') : '' }}
-                        </small>
-                    </div>
+                {% set hasValidatedComments = false %}
+
+                {% for comment in post.comments %}
+                    {% if comment.status == 'validé' %}
+                        {% set hasValidatedComments = true %}
+
+                        <div class="info-panel p-3 mb-3">
+                            <p class="mb-2">{{ comment.content }}</p>
+                            <small class="meta-text">
+                                Par {{ comment.author ? comment.author.email : 'inconnu' }}
+                                le {{ comment.createdAt ? comment.createdAt|date('d/m/Y H:i') : '' }}
+                            </small>
+                        </div>
+                    {% endif %}
                 {% endfor %}
+
+                {% if not hasValidatedComments %}
+                    <div class="alert alert-info">Aucun commentaire validé pour le moment.</div>
+                {% endif %}
             {% endif %}
         </div>
 
