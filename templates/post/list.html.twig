@@ -20,7 +20,11 @@
                     <div class="col-md-6 col-xl-4">
                         <div class="gothic-card p-3 h-100">
                             {% if post.picture %}
-                                <img src="{{ asset('uploads/posts/' ~ post.picture) }}" alt="{{ post.title }}" class="img-fluid post-image mb-3">
+                                {% if post.picture starts with 'http' %}
+                                    <img src="{{ post.picture }}" alt="{{ post.title }}" class="img-fluid post-image mb-3">
+                                {% else %}
+                                    <img src="{{ asset('uploads/posts/' ~ post.picture) }}" alt="{{ post.title }}" class="img-fluid post-image mb-3">
+                                {% endif %}
                             {% endif %}
 
                             <div class="card-body d-flex flex-column px-1">

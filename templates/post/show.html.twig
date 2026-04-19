@@ -14,10 +14,12 @@
             <p><strong>Auteur :</strong> {{ post.author ? post.author.email : 'Inconnu' }}</p>
             <p><strong>Maison :</strong> {{ post.category ? post.category.name : 'Aucune' }}</p>
 
-            {% if post.picture %}
-                <div class="mb-4">
+           {% if post.picture %}
+                {% if post.picture starts with 'http' %}
+                    <img src="{{ post.picture }}" alt="{{ post.title }}" class="img-fluid post-image w-100" style="height: 420px;">
+                {% else %}
                     <img src="{{ asset('uploads/posts/' ~ post.picture) }}" alt="{{ post.title }}" class="img-fluid post-image w-100" style="height: 420px;">
-                </div>
+                {% endif %}
             {% endif %}
 
             <hr class="border-gold">

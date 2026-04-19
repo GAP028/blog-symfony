@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Form\CategoryType;
+use App\Service\AdminLogger;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Attribute\IsGranted;
@@ -18,7 +19,8 @@ final class CategoryController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function newCategory(
         Request $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        AdminLogger $adminLogger
     ): Response {
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
@@ -27,6 +29,15 @@ final class CategoryController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($category);
+
+            $adminLogger->log(
+                'categorie',
+                $category->getName(),
+                'creation_categorie',
+                $this->getUser()->getUserIdentifier(),
+                sprintf("La catégorie '%s' a été créée.", $category->getName())
+            );
+
             $entityManager->flush();
 
             $this->addFlash('success', 'La catégorie a bien été créée.');
@@ -55,13 +66,23 @@ final class CategoryController extends AbstractController
     public function editCategory(
         Category $category,
         Request $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        AdminLogger $adminLogger
     ): Response {
+        $oldName = $category->getName();
         $form = $this->createForm(CategoryType::class, $category);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $adminLogger->log(
+                'categorie',
+                $category->getName(),
+                'modification_categorie',
+                $this->getUser()->getUserIdentifier(),
+                sprintf("La catégorie '%s' a été modifiée. Ancien nom : '%s'.", $category->getName(), $oldName)
+            );
+
             $entityManager->flush();
 
             $this->addFlash('success', 'La catégorie a bien été modifiée.');
@@ -79,8 +100,19 @@ final class CategoryController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function deleteCategory(
         Category $category,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        AdminLogger $adminLogger
     ): Response {
+        $name = $category->getName();
+
+        $adminLogger->log(
+            'categorie',
+            $name,
+            'suppression_categorie',
+            $this->getUser()->getUserIdentifier(),
+            sprintf("La catégorie '%s' a été supprimée.", $name)
+        );
+
         $entityManager->remove($category);
         $entityManager->flush();
 

@@ -9,7 +9,11 @@
             <h1 class="section-title mb-4">Mon profil</h1>
 
             {% if app.user.profilePicture %}
-                <img src="{{ asset('uploads/profiles/' ~ app.user.profilePicture) }}" alt="Photo de profil" class="profile-avatar-large mb-4">
+                {% if app.user.profilePicture starts with 'http' %}
+                    <img src="{{ app.user.profilePicture }}" alt="Photo de profil" class="profile-avatar-large mb-4">
+                {% else %}
+                    <img src="{{ asset('uploads/profiles/' ~ app.user.profilePicture) }}" alt="Photo de profil" class="profile-avatar-large mb-4">
+                {% endif %}
             {% else %}
                 <img src="https://via.placeholder.com/160x160?text=User" alt="Photo de profil" class="profile-avatar-large mb-4">
             {% endif %}

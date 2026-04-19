@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
@@ -38,8 +39,15 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'exemple@mail.com',
                 ],
             ])
+            ->add('profilePicture', UrlType::class, [
+                'label' => 'Photo de profil par URL',
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'https://exemple.com/photo.jpg',
+                ],
+            ])
             ->add('profilePictureFile', FileType::class, [
-                'label' => 'Photo de profil',
+                'label' => 'Ou téléverser une photo',
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [

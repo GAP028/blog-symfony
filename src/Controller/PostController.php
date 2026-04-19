@@ -6,6 +6,7 @@ use App\Entity\Post;
 use App\Entity\Comment;
 use App\Form\PostType;
 use App\Form\CommentType;
+use App\Service\AdminLogger;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +23,8 @@ final class PostController extends AbstractController
     public function newPost(
         Request $request,
         EntityManagerInterface $entityManager,
-        FileUploader $fileUploader
+        FileUploader $fileUploader,
+        AdminLogger $adminLogger
     ): Response {
         $post = new Post();
         $form = $this->createForm(PostType::class, $post);
@@ -34,12 +36,21 @@ final class PostController extends AbstractController
 
             if ($pictureFile) {
                 $filename = $fileUploader->upload($pictureFile, 'posts');
-                $post->setPicture($filename);
+                $post->setPicture('uploads/posts/' . $filename);
             }
 
             $post->setAuthor($this->getUser());
 
             $entityManager->persist($post);
+
+            $adminLogger->log(
+                'article',
+                $post->getTitle(),
+                'creation_article',
+                $this->getUser()->getUserIdentifier(),
+                sprintf("L'article '%s' a été créé.", $post->getTitle())
+            );
+
             $entityManager->flush();
 
             $this->addFlash('success', 'La chronique a bien été créée.');
@@ -80,8 +91,10 @@ final class PostController extends AbstractController
         Post $post,
         Request $request,
         EntityManagerInterface $entityManager,
-        FileUploader $fileUploader
+        FileUploader $fileUploader,
+        AdminLogger $adminLogger
     ): Response {
+        $oldTitle = $post->getTitle();
         $form = $this->createForm(PostType::class, $post);
 
         $form->handleRequest($request);
@@ -91,8 +104,16 @@ final class PostController extends AbstractController
 
             if ($pictureFile) {
                 $filename = $fileUploader->upload($pictureFile, 'posts');
-                $post->setPicture($filename);
+                $post->setPicture('uploads/posts/' . $filename);
             }
+
+            $adminLogger->log(
+                'article',
+                $post->getTitle(),
+                'modification_article',
+                $this->getUser()->getUserIdentifier(),
+                sprintf("L'article '%s' a été modifié. Ancien titre : '%s'.", $post->getTitle(), $oldTitle)
+            );
 
             $entityManager->flush();
 
@@ -110,8 +131,19 @@ final class PostController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function deletePost(
         Post $post,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        AdminLogger $adminLogger
     ): Response {
+        $title = $post->getTitle();
+
+        $adminLogger->log(
+            'article',
+            $title,
+            'suppression_article',
+            $this->getUser()->getUserIdentifier(),
+            sprintf("L'article '%s' a été supprimé.", $title)
+        );
+
         $entityManager->remove($post);
         $entityManager->flush();
 

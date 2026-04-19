@@ -14,8 +14,11 @@ class AdminActionLog
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180)]
-    private ?string $targetEmail = null;
+    #[ORM\Column(length: 100)]
+    private ?string $targetType = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $targetIdentifier = null;
 
     #[ORM\Column(length: 100)]
     private ?string $action = null;
@@ -34,14 +37,25 @@ class AdminActionLog
         return $this->id;
     }
 
-    public function getTargetEmail(): ?string
+    public function getTargetType(): ?string
     {
-        return $this->targetEmail;
+        return $this->targetType;
     }
 
-    public function setTargetEmail(string $targetEmail): static
+    public function setTargetType(string $targetType): static
     {
-        $this->targetEmail = $targetEmail;
+        $this->targetType = $targetType;
+        return $this;
+    }
+
+    public function getTargetIdentifier(): ?string
+    {
+        return $this->targetIdentifier;
+    }
+
+    public function setTargetIdentifier(string $targetIdentifier): static
+    {
+        $this->targetIdentifier = $targetIdentifier;
         return $this;
     }
 

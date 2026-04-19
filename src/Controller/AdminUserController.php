@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\AdminActionLog;
 use App\Entity\User;
 use App\Form\AdminUserType;
+use App\Service\AdminLogger;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,7 +33,8 @@ final class AdminUserController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         UserPasswordHasherInterface $passwordHasher,
-        FileUploader $fileUploader
+        FileUploader $fileUploader,
+        AdminLogger $adminLogger
     ): Response {
         $user = new User();
 
@@ -55,13 +56,22 @@ final class AdminUserController extends AbstractController
 
             if ($profilePictureFile) {
                 $filename = $fileUploader->upload($profilePictureFile, 'profiles');
-                $user->setProfilePicture($filename);
+                $user->setProfilePicture('uploads/profiles/' . $filename);
             }
 
             $user->setRoles([$selectedRole]);
             $user->setCreatedAt(new \DateTimeImmutable());
 
             $entityManager->persist($user);
+
+            $adminLogger->log(
+                'utilisateur',
+                $user->getEmail(),
+                'creation_utilisateur',
+                $this->getUser()->getUserIdentifier(),
+                sprintf("L'utilisateur %s a été créé.", $user->getEmail())
+            );
+
             $entityManager->flush();
 
             $this->addFlash('success', 'L’utilisateur a bien été ajouté.');
@@ -81,9 +91,11 @@ final class AdminUserController extends AbstractController
         Request $request,
         EntityManagerInterface $entityManager,
         UserPasswordHasherInterface $passwordHasher,
-        FileUploader $fileUploader
+        FileUploader $fileUploader,
+        AdminLogger $adminLogger
     ): Response {
         $currentRole = in_array('ROLE_ADMIN', $user->getRoles(), true) ? 'ROLE_ADMIN' : 'ROLE_USER';
+        $oldEmail = $user->getEmail();
 
         $form = $this->createForm(AdminUserType::class, $user, [
             'is_edit' => true,
@@ -105,11 +117,19 @@ final class AdminUserController extends AbstractController
 
             if ($profilePictureFile) {
                 $filename = $fileUploader->upload($profilePictureFile, 'profiles');
-                $user->setProfilePicture($filename);
+                $user->setProfilePicture('uploads/profiles/' . $filename);
             }
 
             $user->setRoles([$selectedRole]);
             $user->setUpdatedAt(new \DateTimeImmutable());
+
+            $adminLogger->log(
+                'utilisateur',
+                $user->getEmail(),
+                'modification_utilisateur',
+                $this->getUser()->getUserIdentifier(),
+                sprintf("L'utilisateur %s a été modifié. Ancien email : %s.", $user->getEmail(), $oldEmail)
+            );
 
             $entityManager->flush();
 
@@ -125,27 +145,27 @@ final class AdminUserController extends AbstractController
     }
 
     #[Route('/{id}/toggle', name: 'toggle')]
-    public function toggleUser(User $user, EntityManagerInterface $entityManager): Response
-    {
-        /** @var User $admin */
-        $admin = $this->getUser();
-
+    public function toggleUser(
+        User $user,
+        EntityManagerInterface $entityManager,
+        AdminLogger $adminLogger
+    ): Response {
         $newState = !$user->isActive();
         $user->setIsActive($newState);
 
-        $log = new AdminActionLog();
-        $log->setTargetEmail($user->getEmail());
-        $log->setPerformedByEmail($admin->getEmail());
-        $log->setAction($newState ? 'activation_compte' : 'desactivation_compte');
-        $log->setCreatedAt(new \DateTimeImmutable());
-        $log->setDetails(sprintf(
-            "Le compte %s a été %s par l'administrateur %s.",
+        $adminLogger->log(
+            'utilisateur',
             $user->getEmail(),
-            $newState ? 'activé' : 'désactivé',
-            $admin->getEmail()
-        ));
+            $newState ? 'activation_compte' : 'desactivation_compte',
+            $this->getUser()->getUserIdentifier(),
+            sprintf(
+                "Le compte %s a été %s par l'administrateur %s.",
+                $user->getEmail(),
+                $newState ? 'activé' : 'désactivé',
+                $this->getUser()->getUserIdentifier()
+            )
+        );
 
-        $entityManager->persist($log);
         $entityManager->flush();
 
         $this->addFlash(
@@ -154,7 +174,7 @@ final class AdminUserController extends AbstractController
                 "Le compte %s a bien été %s par %s.",
                 $user->getEmail(),
                 $newState ? 'activé' : 'désactivé',
-                $admin->getEmail()
+                $this->getUser()->getUserIdentifier()
             )
         );
 
@@ -162,25 +182,25 @@ final class AdminUserController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
-    public function deleteUser(User $user, EntityManagerInterface $entityManager): Response
-    {
-        /** @var User $admin */
-        $admin = $this->getUser();
-
+    public function deleteUser(
+        User $user,
+        EntityManagerInterface $entityManager,
+        AdminLogger $adminLogger
+    ): Response {
         $targetEmail = $user->getEmail();
 
-        $log = new AdminActionLog();
-        $log->setTargetEmail($targetEmail);
-        $log->setPerformedByEmail($admin->getEmail());
-        $log->setAction('suppression_compte');
-        $log->setCreatedAt(new \DateTimeImmutable());
-        $log->setDetails(sprintf(
-            "Le compte %s a été supprimé par l'administrateur %s.",
+        $adminLogger->log(
+            'utilisateur',
             $targetEmail,
-            $admin->getEmail()
-        ));
+            'suppression_compte',
+            $this->getUser()->getUserIdentifier(),
+            sprintf(
+                "Le compte %s a été supprimé par l'administrateur %s.",
+                $targetEmail,
+                $this->getUser()->getUserIdentifier()
+            )
+        );
 
-        $entityManager->persist($log);
         $entityManager->remove($user);
         $entityManager->flush();
 
@@ -189,7 +209,7 @@ final class AdminUserController extends AbstractController
             sprintf(
                 "Le compte %s a été supprimé par %s.",
                 $targetEmail,
-                $admin->getEmail()
+                $this->getUser()->getUserIdentifier()
             )
         );
 

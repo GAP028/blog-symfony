@@ -36,7 +36,7 @@ class RegistrationController extends AbstractController
 
             if ($profilePictureFile) {
                 $filename = $fileUploader->upload($profilePictureFile, 'profiles');
-                $user->setProfilePicture($filename);
+                $user->setProfilePicture('uploads/profiles/' . $filename);
             }
 
             $user->setCreatedAt(new \DateTimeImmutable());
