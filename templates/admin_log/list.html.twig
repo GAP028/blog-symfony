@@ -7,7 +7,7 @@
         <div class="gothic-card p-4">
             <div class="brand-mark">Administration</div>
             <h1 class="section-title mb-2">Journal des actions administrateur</h1>
-            <p class="soft-text">Historique des activations, désactivations et suppressions de comptes.</p>
+            <p class="soft-text">Historique des actions sensibles réalisées par les administrateurs.</p>
 
             {% if logs is empty %}
                 <div class="alert alert-info mt-4">Aucune action enregistrée.</div>
@@ -17,8 +17,9 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>Type cible</th>
+                                <th>Cible</th>
                                 <th>Action</th>
-                                <th>Compte ciblé</th>
                                 <th>Effectué par</th>
                                 <th>Date</th>
                                 <th>Détails</th>
@@ -28,8 +29,9 @@
                             {% for log in logs %}
                                 <tr>
                                     <td>{{ log.id }}</td>
+                                    <td>{{ log.targetType }}</td>
+                                    <td>{{ log.targetIdentifier }}</td>
                                     <td>{{ log.action }}</td>
-                                    <td>{{ log.targetEmail }}</td>
                                     <td>{{ log.performedByEmail }}</td>
                                     <td>{{ log.createdAt ? log.createdAt|date('d/m/Y H:i') : '' }}</td>
                                     <td>{{ log.details }}</td>

@@ -36,7 +36,7 @@ final class PostController extends AbstractController
 
             if ($pictureFile) {
                 $filename = $fileUploader->upload($pictureFile, 'posts');
-                $post->setPicture('uploads/posts/' . $filename);
+                $post->setPicture($filename);
             }
 
             $post->setAuthor($this->getUser());
@@ -104,7 +104,7 @@ final class PostController extends AbstractController
 
             if ($pictureFile) {
                 $filename = $fileUploader->upload($pictureFile, 'posts');
-                $post->setPicture('uploads/posts/' . $filename);
+                $post->setPicture($filename);
             }
 
             $adminLogger->log(

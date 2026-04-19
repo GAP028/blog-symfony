@@ -17,7 +17,8 @@ class FileUploader
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = $this->slugger->slug($originalFilename);
-        $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
+        $extension = $file->guessExtension() ?: 'bin';
+        $newFilename = $safeFilename . '-' . uniqid() . '.' . $extension;
 
         $destination = $this->targetDirectory . '/' . $folder;
 
